@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Sender Accounts Setup</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+  </head>
+  <body
+    class="bg-gradient-to-r from-yellow-400 via-red-500 to-pink-500 min-h-screen p-8 text-white"
+  >
+    <div
+      class="max-w-3xl mx-auto bg-black bg-opacity-30 rounded-lg p-8 shadow-lg"
+    >
+      <h1 class="text-3xl font-bold mb-6 text-center drop-shadow-lg">
+        Sender Accounts
+      </h1>
+
+      <form
+        method="POST"
+        class="mb-6 flex flex-col sm:flex-row gap-4 items-center justify-center"
+      >
+        <input
+          type="email"
+          name="email"
+          placeholder="Email Address"
+          required
+          class="p-2 rounded text-black w-full sm:w-72"
+        />
+        <input
+          type="password"
+          name="password"
+          placeholder="App Password"
+          required
+          class="p-2 rounded text-black w-full sm:w-72"
+        />
+        <button
+          class="bg-yellow-600 hover:bg-yellow-700 rounded px-6 py-2 font-semibold shadow-lg transition duration-300"
+          type="submit"
+        >
+          Add Account
+        </button>
+      </form>
+
+      <ul class="divide-y divide-yellow-400 divide-opacity-40">
+        {% for acc in accounts %}
+        <li class="flex justify-between items-center p-4">
+          <span>{{ acc.email }}</span>
+          <form
+            method="POST"
+            action="{{ url_for('remove_account', email=acc.email) }}"
+          >
+            <button
+              type="submit"
+              class="bg-red-600 hover:bg-red-700 px-4 py-1 rounded text-white font-bold"
+            >
+              Remove
+            </button>
+          </form>
+        </li>
+        {% else %}
+        <li class="p-4 text-center text-yellow-300">
+          No sender accounts added yet.
+        </li>
+        {% endfor %}
+      </ul>
+
+      <div class="mt-6 text-center">
+        <a
+          href="{{ url_for('dashboard') }}"
+          class="underline hover:text-yellow-300"
+          >Back to Dashboard</a
+        >
+      </div>
+
+      {% with messages = get_flashed_messages(with_categories=true) %} {% if
+      messages %}
+      <div class="mt-6 max-w-md mx-auto">
+        {% for category, message in messages %}
+        <div
+          class="mb-2 rounded px-4 py-3 text-white {% if category == 'success' %}bg-green-500 {% elif category == 'danger' %}bg-red-500 {% elif category == 'warning' %}bg-yellow-400 text-black {% endif %}"
+        >
+          {{ message }}
+        </div>
+        {% endfor %}
+      </div>
+      {% endif %} {% endwith %}
+    </div>
+  </body>
+</html>
