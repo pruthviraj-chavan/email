@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Upload Excel Email Files</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+  </head>
+  <body
+    class="bg-gradient-to-r from-green-400 via-blue-500 to-indigo-600 min-h-screen p-8 text-white"
+  >
+    <div
+      class="max-w-3xl mx-auto bg-black bg-opacity-40 rounded-lg p-8 shadow-lg"
+    >
+      <h1 class="text-3xl font-bold mb-6 text-center drop-shadow-lg">
+        Upload Excel Files
+      </h1>
+
+      <form method="POST" enctype="multipart/form-data" class="mb-6">
+        <input
+          type="file"
+          name="files"
+          multiple
+          required
+          accept=".xls,.xlsx"
+          class="block w-full p-2 mb-4 text-black rounded"
+        />
+        <button
+          type="submit"
+          class="w-full bg-green-600 hover:bg-green-700 rounded py-3 font-semibold shadow-lg transition duration-300"
+        >
+          Upload
+        </button>
+      </form>
+
+      {% if log %}
+      <div class="mt-6 bg-white bg-opacity-20 p-4 rounded text-black">
+        <h2 class="text-xl font-semibold mb-4">Upload Log</h2>
+        <ul class="list-disc list-inside">
+          <li>Total Rows Processed: {{ log.processed }}</li>
+          <li>Valid Emails: {{ log.valid }}</li>
+          <li>Duplicate Emails Skipped: {{ log.duplicates }}</li>
+          <li>New Emails Inserted: {{ log.inserted }}</li>
+        </ul>
+      </div>
+      {% endif %}
+
+      <div class="mt-6 text-center">
+        <a
+          href="{{ url_for('dashboard') }}"
+          class="underline hover:text-green-300"
+          >Back to Dashboard</a
+        >
+      </div>
+
+      {% with messages = get_flashed_messages(with_categories=true) %} {% if
+      messages %}
+      <div class="mt-6 max-w-md mx-auto">
+        {% for category, message in messages %}
+        <div
+          class="mb-2 rounded px-4 py-3 text-white {% if category == 'success' %}bg-green-500 {% elif category == 'danger' %}bg-red-500 {% elif category == 'warning' %}bg-yellow-400 text-black {% endif %}"
+        >
+          {{ message }}
+        </div>
+        {% endfor %}
+      </div>
+      {% endif %} {% endwith %}
+    </div>
+  </body>
+</html>
