@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Campaign Setup</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+  </head>
+  <body
+    class="bg-gradient-to-r from-blue-400 via-purple-600 to-indigo-700 min-h-screen p-8 text-white"
+  >
+    <div
+      class="max-w-3xl mx-auto bg-black bg-opacity-30 rounded-lg p-8 shadow-lg"
+    >
+      <h1 class="text-3xl font-bold mb-6 text-center drop-shadow-lg">
+        Campaign Setup
+      </h1>
+
+      <form
+        method="POST"
+        enctype="multipart/form-data"
+        class="flex flex-col gap-4"
+      >
+        <input
+          type="text"
+          name="subject"
+          placeholder="Email Subject"
+          required
+          class="p-3 rounded text-black font-semibold text-lg"
+        />
+
+        <textarea
+          name="body"
+          rows="8"
+          placeholder="Email Body (supports {email} placeholder)"
+          required
+          class="p-3 rounded text-black font-medium text-lg resize-none"
+        ></textarea>
+
+        <input type="file" name="attachment" class="text-white" />
+
+        <button
+          type="submit"
+          class="bg-blue-600 hover:bg-blue-700 rounded py-3 font-semibold shadow-lg transition duration-300"
+        >
+          Save Campaign for This Run
+        </button>
+      </form>
+
+      {% if campaign %}
+      <div class="mt-6 bg-white bg-opacity-20 p-4 rounded text-black">
+        <h2 class="text-xl font-semibold mb-2">
+          Previous Campaign (this session)
+        </h2>
+        <p><strong>Subject:</strong> {{ campaign.subject }}</p>
+        <p><strong>Body:</strong> {{ campaign.body }}</p>
+        <p><strong>Attachment:</strong> {{ campaign.attachment or "None" }}</p>
+      </div>
+      {% endif %}
+
+      <div class="mt-6 text-center">
+        <a
+          href="{{ url_for('dashboard') }}"
+          class="underline hover:text-blue-300"
+          >Back to Dashboard</a
+        >
+      </div>
+
+      {% with messages = get_flashed_messages(with_categories=true) %} {% if
+      messages %}
+      <div class="mt-6 max-w-md mx-auto">
+        {% for category, message in messages %}
+        <div
+          class="mb-2 rounded px-4 py-3 text-white {% if category == 'success' %}bg-green-500 {% elif category == 'danger' %}bg-red-500 {% elif category == 'warning' %}bg-yellow-400 text-black {% endif %}"
+        >
+          {{ message }}
+        </div>
+        {% endfor %}
+      </div>
+      {% endif %} {% endwith %}
+    </div>
+  </body>
+</html>
